@@ -1,0 +1,2451 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        LegalEase | AI Legal Document Generator
+    </title>
+
+
+    <style>
+
+        /* =====================================================
+           RESET
+        ===================================================== */
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+
+        body {
+
+            font-family:
+                Inter,
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                Arial,
+                sans-serif;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #f5f7ff 0%,
+                    #eef2ff 50%,
+                    #f8f9ff 100%
+                );
+
+            color: #1f2937;
+
+            min-height: 100vh;
+
+        }
+
+
+        button,
+        input,
+        textarea,
+        select {
+            font-family: inherit;
+        }
+
+
+        /* =====================================================
+           HEADER
+        ===================================================== */
+
+        header {
+
+            width: 100%;
+
+            padding:
+                22px 6%;
+
+            background:
+                rgba(255, 255, 255, 0.96);
+
+            border-bottom:
+                1px solid #e5e7eb;
+
+            display: flex;
+
+            justify-content:
+                space-between;
+
+            align-items:
+                center;
+
+            position: sticky;
+
+            top: 0;
+
+            z-index: 1000;
+
+            backdrop-filter:
+                blur(12px);
+
+        }
+
+
+        .logo {
+
+            font-size: 26px;
+
+            font-weight: 800;
+
+            color: #4f46e5;
+
+            letter-spacing:
+                -0.7px;
+
+        }
+
+
+        .logo span {
+            color: #111827;
+        }
+
+
+        .badge {
+
+            padding:
+                9px 16px;
+
+            border-radius:
+                999px;
+
+            background:
+                #eef2ff;
+
+            color:
+                #4f46e5;
+
+            font-size:
+                13px;
+
+            font-weight:
+                700;
+
+        }
+
+
+        /* =====================================================
+           HERO
+        ===================================================== */
+
+        .hero {
+
+            max-width:
+                1050px;
+
+            margin:
+                0 auto;
+
+            padding:
+                75px 20px 45px;
+
+            text-align:
+                center;
+
+        }
+
+
+        .hero h1 {
+
+            font-size:
+                clamp(
+                    40px,
+                    6vw,
+                    64px
+                );
+
+            line-height:
+                1.08;
+
+            font-weight:
+                800;
+
+            color:
+                #111827;
+
+            margin-bottom:
+                22px;
+
+            letter-spacing:
+                -2px;
+
+        }
+
+
+        .hero h1 span {
+            color:
+                #4f46e5;
+        }
+
+
+        .hero p {
+
+            max-width:
+                760px;
+
+            margin:
+                0 auto;
+
+            font-size:
+                18px;
+
+            line-height:
+                1.7;
+
+            color:
+                #64748b;
+
+        }
+
+
+        /* =====================================================
+           GENERATOR CONTAINER
+        ===================================================== */
+
+        .generator-container {
+
+            width:
+                92%;
+
+            max-width:
+                1050px;
+
+            margin:
+                0 auto 50px;
+
+            background:
+                #ffffff;
+
+            border-radius:
+                22px;
+
+            padding:
+                36px;
+
+            box-shadow:
+                0 18px 50px
+                rgba(
+                    15,
+                    23,
+                    42,
+                    0.08
+                );
+
+            border:
+                1px solid #e5e7eb;
+
+        }
+
+
+        .generator-container h2 {
+
+            font-size:
+                28px;
+
+            color:
+                #111827;
+
+            margin-bottom:
+                9px;
+
+        }
+
+
+        .generator-description {
+
+            color:
+                #64748b;
+
+            line-height:
+                1.65;
+
+            margin-bottom:
+                30px;
+
+        }
+
+
+        /* =====================================================
+           FORM
+        ===================================================== */
+
+        .form-group {
+
+            margin-bottom:
+                23px;
+
+        }
+
+
+        .form-group label {
+
+            display:
+                block;
+
+            margin-bottom:
+                9px;
+
+            font-weight:
+                700;
+
+            color:
+                #374151;
+
+        }
+
+
+        select,
+        textarea {
+
+            width:
+                100%;
+
+            border:
+                1px solid #d1d5db;
+
+            border-radius:
+                12px;
+
+            padding:
+                14px 16px;
+
+            font-size:
+                15px;
+
+            color:
+                #111827;
+
+            background:
+                #ffffff;
+
+            outline:
+                none;
+
+            transition:
+                border-color 0.2s,
+                box-shadow 0.2s;
+
+        }
+
+
+        select {
+
+            cursor:
+                pointer;
+
+        }
+
+
+        select:focus,
+        textarea:focus {
+
+            border-color:
+                #6366f1;
+
+            box-shadow:
+                0 0 0 3px
+                rgba(
+                    99,
+                    102,
+                    241,
+                    0.12
+                );
+
+        }
+
+
+        #userInput {
+
+            min-height:
+                210px;
+
+            resize:
+                vertical;
+
+            line-height:
+                1.6;
+
+        }
+
+
+        /* =====================================================
+           GENERATE BUTTON
+        ===================================================== */
+
+        .generate-button {
+
+            width:
+                100%;
+
+            border:
+                none;
+
+            border-radius:
+                12px;
+
+            padding:
+                16px 20px;
+
+            background:
+                #4f46e5;
+
+            color:
+                #ffffff;
+
+            font-size:
+                16px;
+
+            font-weight:
+                700;
+
+            cursor:
+                pointer;
+
+            transition:
+                0.2s ease;
+
+        }
+
+
+        .generate-button:hover {
+
+            background:
+                #4338ca;
+
+            transform:
+                translateY(-1px);
+
+            box-shadow:
+                0 10px 25px
+                rgba(
+                    79,
+                    70,
+                    229,
+                    0.25
+                );
+
+        }
+
+
+        .generate-button:disabled {
+
+            opacity:
+                0.65;
+
+            cursor:
+                not-allowed;
+
+            transform:
+                none;
+
+        }
+
+
+        /* =====================================================
+           LOADING
+        ===================================================== */
+
+        #loading {
+
+            display:
+                none;
+
+            text-align:
+                center;
+
+            padding:
+                28px 10px;
+
+            color:
+                #4f46e5;
+
+            font-weight:
+                600;
+
+        }
+
+
+        .spinner {
+
+            width:
+                28px;
+
+            height:
+                28px;
+
+            border:
+                3px solid #e0e7ff;
+
+            border-top-color:
+                #4f46e5;
+
+            border-radius:
+                50%;
+
+            animation:
+                spin 0.8s linear infinite;
+
+            margin:
+                0 auto 12px;
+
+        }
+
+
+        @keyframes spin {
+
+            to {
+                transform:
+                    rotate(360deg);
+            }
+
+        }
+
+
+        /* =====================================================
+           RESULT
+        ===================================================== */
+
+        #resultSection {
+
+            display:
+                none;
+
+            margin-top:
+                35px;
+
+            padding-top:
+                30px;
+
+            border-top:
+                1px solid #e5e7eb;
+
+        }
+
+
+        .result-title {
+
+            font-size:
+                24px;
+
+            font-weight:
+                750;
+
+            color:
+                #111827;
+
+            margin-bottom:
+                14px;
+
+        }
+
+
+        .result-subtitle {
+
+            color:
+                #64748b;
+
+            font-size:
+                14px;
+
+            margin-bottom:
+                15px;
+
+        }
+
+
+        #generatedDocument {
+
+            width:
+                100%;
+
+            min-height:
+                520px;
+
+            padding:
+                20px;
+
+            border:
+                1px solid #d1d5db;
+
+            border-radius:
+                12px;
+
+            background:
+                #fafafa;
+
+            color:
+                #111827;
+
+            font-family:
+                Georgia,
+                "Times New Roman",
+                serif;
+
+            font-size:
+                16px;
+
+            line-height:
+                1.75;
+
+            resize:
+                vertical;
+
+            outline:
+                none;
+
+        }
+
+
+        #generatedDocument:focus {
+
+            background:
+                #ffffff;
+
+            border-color:
+                #6366f1;
+
+            box-shadow:
+                0 0 0 3px
+                rgba(
+                    99,
+                    102,
+                    241,
+                    0.10
+                );
+
+        }
+
+
+        /* =====================================================
+           RESULT BUTTONS
+        ===================================================== */
+
+        .result-actions {
+
+            display:
+                flex;
+
+            flex-wrap:
+                wrap;
+
+            gap:
+                12px;
+
+            margin-top:
+                18px;
+
+        }
+
+
+        .action-button {
+
+            border:
+                none;
+
+            border-radius:
+                10px;
+
+            padding:
+                12px 21px;
+
+            font-size:
+                14px;
+
+            font-weight:
+                700;
+
+            cursor:
+                pointer;
+
+            transition:
+                0.2s ease;
+
+        }
+
+
+        .action-button:hover {
+
+            transform:
+                translateY(-1px);
+
+        }
+
+
+        .action-button:disabled {
+
+            opacity:
+                0.6;
+
+            cursor:
+                not-allowed;
+
+            transform:
+                none;
+
+        }
+
+
+        .copy-button {
+
+            background:
+                #f3f4f6;
+
+            color:
+                #111827;
+
+        }
+
+
+        .copy-button:hover {
+
+            background:
+                #e5e7eb;
+
+        }
+
+
+        .pdf-button {
+
+            background:
+                #111827;
+
+            color:
+                #ffffff;
+
+        }
+
+
+        .pdf-button:hover {
+
+            background:
+                #030712;
+
+        }
+
+
+        .again-button {
+
+            background:
+                #4f46e5;
+
+            color:
+                #ffffff;
+
+        }
+
+
+        .again-button:hover {
+
+            background:
+                #4338ca;
+
+        }
+
+
+        /* =====================================================
+           LEGAL NOTICE
+        ===================================================== */
+
+        .notice {
+
+            width:
+                92%;
+
+            max-width:
+                1050px;
+
+            margin:
+                0 auto 45px;
+
+            padding:
+                18px 22px;
+
+            background:
+                #fffbeb;
+
+            border:
+                1px solid #fde68a;
+
+            border-radius:
+                12px;
+
+            color:
+                #92400e;
+
+            font-size:
+                14px;
+
+            line-height:
+                1.6;
+
+            text-align:
+                center;
+
+        }
+
+
+        /* =====================================================
+           FEATURES
+        ===================================================== */
+
+        .features-section {
+
+            width:
+                92%;
+
+            max-width:
+                1180px;
+
+            margin:
+                0 auto 80px;
+
+        }
+
+
+        .features-grid {
+
+            display:
+                grid;
+
+            grid-template-columns:
+                repeat(
+                    3,
+                    1fr
+                );
+
+            gap:
+                20px;
+
+        }
+
+
+        .feature-card {
+
+            background:
+                #ffffff;
+
+            border:
+                1px solid #e5e7eb;
+
+            border-radius:
+                20px;
+
+            padding:
+                30px 25px;
+
+            text-align:
+                center;
+
+            cursor:
+                pointer;
+
+            transition:
+                transform 0.25s ease,
+                box-shadow 0.25s ease,
+                border-color 0.25s ease;
+
+        }
+
+
+        .feature-card:hover {
+
+            transform:
+                translateY(-7px);
+
+            border-color:
+                #c7d2fe;
+
+            box-shadow:
+                0 18px 38px
+                rgba(
+                    15,
+                    23,
+                    42,
+                    0.10
+                );
+
+        }
+
+
+        .feature-icon {
+
+            width:
+                72px;
+
+            height:
+                72px;
+
+            margin:
+                0 auto 18px;
+
+            border-radius:
+                18px;
+
+            background:
+                #eef2ff;
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            justify-content:
+                center;
+
+            font-size:
+                36px;
+
+            transition:
+                transform 0.25s ease;
+
+        }
+
+
+        .feature-card:hover
+        .feature-icon {
+
+            transform:
+                scale(1.08);
+
+        }
+
+
+        .feature-card h3 {
+
+            font-size:
+                20px;
+
+            color:
+                #111827;
+
+            margin-bottom:
+                10px;
+
+        }
+
+
+        .feature-card p {
+
+            color:
+                #64748b;
+
+            line-height:
+                1.6;
+
+            min-height:
+                52px;
+
+            margin-bottom:
+                20px;
+
+        }
+
+
+        .feature-button {
+
+            border:
+                none;
+
+            border-radius:
+                9px;
+
+            padding:
+                10px 17px;
+
+            background:
+                #eef2ff;
+
+            color:
+                #4338ca;
+
+            font-size:
+                13px;
+
+            font-weight:
+                700;
+
+            cursor:
+                pointer;
+
+            transition:
+                0.2s ease;
+
+        }
+
+
+        .feature-card:hover
+        .feature-button {
+
+            background:
+                #4f46e5;
+
+            color:
+                #ffffff;
+
+        }
+
+
+        /* =====================================================
+           FOOTER
+        ===================================================== */
+
+        footer {
+
+            text-align:
+                center;
+
+            padding:
+                30px 20px 45px;
+
+            color:
+                #64748b;
+
+            font-size:
+                14px;
+
+        }
+
+
+        footer p {
+
+            margin-bottom:
+                8px;
+
+        }
+
+
+        /* =====================================================
+           RESPONSIVE
+        ===================================================== */
+
+        @media (
+            max-width: 850px
+        ) {
+
+            .features-grid {
+
+                grid-template-columns:
+                    1fr;
+
+            }
+
+        }
+
+
+        @media (
+            max-width: 600px
+        ) {
+
+            header {
+
+                padding:
+                    18px 5%;
+
+            }
+
+
+            .badge {
+
+                display:
+                    none;
+
+            }
+
+
+            .hero {
+
+                padding:
+                    55px 20px 35px;
+
+            }
+
+
+            .hero h1 {
+
+                font-size:
+                    40px;
+
+            }
+
+
+            .hero p {
+
+                font-size:
+                    16px;
+
+            }
+
+
+            .generator-container {
+
+                padding:
+                    25px 20px;
+
+            }
+
+
+            .result-actions {
+
+                flex-direction:
+                    column;
+
+            }
+
+
+            .action-button {
+
+                width:
+                    100%;
+
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- =====================================================
+         HEADER
+    ===================================================== -->
+
+    <header>
+
+        <div class="logo">
+
+            Legal<span>Ease</span>
+
+        </div>
+
+
+        <div class="badge">
+
+            Powered by Groq AI
+
+        </div>
+
+    </header>
+
+
+
+    <!-- =====================================================
+         HERO
+    ===================================================== -->
+
+    <section class="hero">
+
+        <h1>
+
+            AI-Powered
+            <span>Legal Documents</span>
+
+        </h1>
+
+
+        <p>
+
+            Create structured legal document drafts using AI,
+            review and edit them, and export your document
+            as a PDF.
+
+        </p>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         GENERATOR
+    ===================================================== -->
+
+    <section
+        class="generator-container"
+        id="generatorSection"
+    >
+
+        <h2>
+
+            Create Your Legal Document
+
+        </h2>
+
+
+        <p class="generator-description">
+
+            Select the type of document and provide the
+            required information. LegalEase will generate
+            a structured draft for your review.
+
+        </p>
+
+
+
+        <!-- DOCUMENT TYPE -->
+
+        <div class="form-group">
+
+            <label for="documentType">
+
+                Document Type
+
+            </label>
+
+
+            <select
+                id="documentType"
+            >
+
+                <option value="rental_agreement">
+
+                    Rental Agreement
+
+                </option>
+
+
+                <option value="nda">
+
+                    Non-Disclosure Agreement
+
+                </option>
+
+
+                <option value="employment_agreement">
+
+                    Employment Agreement
+
+                </option>
+
+
+                <option value="service_agreement">
+
+                    Service Agreement
+
+                </option>
+
+
+                <option value="affidavit">
+
+                    Affidavit
+
+                </option>
+
+
+                <option value="authorization_letter">
+
+                    Authorization Letter
+
+                </option>
+
+            </select>
+
+        </div>
+
+
+
+        <!-- USER DETAILS -->
+
+        <div class="form-group">
+
+            <label for="userInput">
+
+                Enter Your Details
+
+            </label>
+
+
+            <textarea
+                id="userInput"
+                placeholder="Enter the information required for your document..."
+            ></textarea>
+
+        </div>
+
+
+
+        <!-- GENERATE -->
+
+        <button
+            type="button"
+            class="generate-button"
+            id="generateBtn"
+        >
+
+            Generate Legal Document
+
+        </button>
+
+
+
+        <!-- LOADING -->
+
+        <div id="loading">
+
+            <div class="spinner"></div>
+
+            Generating your legal document...
+
+        </div>
+
+
+
+        <!-- =================================================
+             RESULT
+        ================================================== -->
+
+        <div id="resultSection">
+
+            <div class="result-title">
+
+                Generated Document
+
+            </div>
+
+
+            <div class="result-subtitle">
+
+                Review and edit the document below before
+                downloading it as a PDF.
+
+            </div>
+
+
+            <textarea
+                id="generatedDocument"
+                placeholder="Your generated document will appear here..."
+            ></textarea>
+
+
+            <div class="result-actions">
+
+
+                <!-- COPY -->
+
+                <button
+                    type="button"
+                    class="action-button copy-button"
+                    id="copyBtn"
+                >
+
+                    Copy
+
+                </button>
+
+
+
+                <!-- PDF -->
+
+                <button
+                    type="button"
+                    class="action-button pdf-button"
+                    id="downloadPdfBtn"
+                >
+
+                    Download PDF
+
+                </button>
+
+
+
+                <!-- GENERATE AGAIN -->
+
+                <button
+                    type="button"
+                    class="action-button again-button"
+                    id="generateAgainBtn"
+                >
+
+                    Generate Again
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         NOTICE
+    ===================================================== -->
+
+    <div class="notice">
+
+        <strong>
+            Important:
+        </strong>
+
+        LegalEase generates AI-assisted document drafts
+        for review and does not replace professional legal advice.
+
+    </div>
+
+
+
+    <!-- =====================================================
+         FEATURE CARDS
+    ===================================================== -->
+
+    <section class="features-section">
+
+        <div class="features-grid">
+
+
+            <!-- =================================================
+                 GENERATIVE AI
+            ================================================= -->
+
+            <div
+                class="feature-card"
+                id="aiCard"
+            >
+
+                <div class="feature-icon">
+
+                    🤖
+
+                </div>
+
+
+                <h3>
+
+                    Generative AI
+
+                </h3>
+
+
+                <p>
+
+                    Uses Groq AI to generate structured
+                    legal document drafts.
+
+                </p>
+
+
+                <button
+                    type="button"
+                    class="feature-button"
+                    id="aiCardButton"
+                >
+
+                    Generate Document
+
+                </button>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 EDITABLE
+            ================================================= -->
+
+            <div
+                class="feature-card"
+                id="editCard"
+            >
+
+                <div class="feature-icon">
+
+                    📝
+
+                </div>
+
+
+                <h3>
+
+                    Editable
+
+                </h3>
+
+
+                <p>
+
+                    Review and modify the generated
+                    document before downloading.
+
+                </p>
+
+
+                <button
+                    type="button"
+                    class="feature-button"
+                    id="editCardButton"
+                >
+
+                    Edit Document
+
+                </button>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 PDF EXPORT
+            ================================================= -->
+
+            <div
+                class="feature-card"
+                id="pdfCard"
+            >
+
+                <div class="feature-icon">
+
+                    📄
+
+                </div>
+
+
+                <h3>
+
+                    PDF Export
+
+                </h3>
+
+
+                <p>
+
+                    Download your generated draft
+                    as a PDF document.
+
+                </p>
+
+
+                <button
+                    type="button"
+                    class="feature-button"
+                    id="pdfCardButton"
+                >
+
+                    Download PDF
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         FOOTER
+    ===================================================== -->
+
+    <footer>
+
+        <p>
+
+            © 2026 LegalEase · AI-assisted document drafting
+
+        </p>
+
+
+        <p>
+
+            LegalEase does not replace professional legal advice.
+
+        </p>
+
+    </footer>
+
+
+
+    <!-- =====================================================
+         JAVASCRIPT
+    ===================================================== -->
+
+    <script>
+
+
+        /* =====================================================
+           ELEMENTS
+        ===================================================== */
+
+        const generatorSection =
+            document.getElementById(
+                "generatorSection"
+            );
+
+
+        const documentType =
+            document.getElementById(
+                "documentType"
+            );
+
+
+        const userInput =
+            document.getElementById(
+                "userInput"
+            );
+
+
+        const generateBtn =
+            document.getElementById(
+                "generateBtn"
+            );
+
+
+        const loading =
+            document.getElementById(
+                "loading"
+            );
+
+
+        const resultSection =
+            document.getElementById(
+                "resultSection"
+            );
+
+
+        const generatedDocument =
+            document.getElementById(
+                "generatedDocument"
+            );
+
+
+        const copyBtn =
+            document.getElementById(
+                "copyBtn"
+            );
+
+
+        const downloadPdfBtn =
+            document.getElementById(
+                "downloadPdfBtn"
+            );
+
+
+        const generateAgainBtn =
+            document.getElementById(
+                "generateAgainBtn"
+            );
+
+
+
+        /* =====================================================
+           GO TO GENERATOR
+        ===================================================== */
+
+        function goToGenerator() {
+
+            generatorSection.scrollIntoView({
+
+                behavior:
+                    "smooth",
+
+                block:
+                    "start"
+
+            });
+
+
+            setTimeout(
+                function () {
+
+                    userInput.focus();
+
+                },
+                700
+            );
+
+        }
+
+
+
+        /* =====================================================
+           EDITOR
+        ===================================================== */
+
+        function goToEditor() {
+
+
+            /*
+             * If there is no generated document,
+             * simply go to the generator.
+             *
+             * NO ERROR POPUP.
+             */
+
+            if (
+                !generatedDocument.value.trim()
+            ) {
+
+                goToGenerator();
+
+                return;
+
+            }
+
+
+            /*
+             * Document exists.
+             */
+
+            resultSection.scrollIntoView({
+
+                behavior:
+                    "smooth",
+
+                block:
+                    "start"
+
+            });
+
+
+            setTimeout(
+                function () {
+
+                    generatedDocument.focus();
+
+                },
+                700
+            );
+
+        }
+
+
+
+        /* =====================================================
+           GENERATE DOCUMENT
+        ===================================================== */
+
+        async function generateDocument() {
+
+
+            const selectedDocumentType =
+                documentType.value;
+
+
+            const details =
+                userInput.value.trim();
+
+
+            /*
+             * Check user input.
+             */
+
+            if (!details) {
+
+                alert(
+                    "Please enter the required document details."
+                );
+
+
+                userInput.focus();
+
+                return;
+
+            }
+
+
+            /*
+             * Loading state.
+             */
+
+            generateBtn.disabled =
+                true;
+
+
+            generateBtn.textContent =
+                "Generating...";
+
+
+            loading.style.display =
+                "block";
+
+
+            resultSection.style.display =
+                "none";
+
+
+            try {
+
+
+                /* =================================================
+                   SEND DATA TO FLASK
+                   
+                   IMPORTANT:
+                   Flask expects "user_details".
+                ================================================== */
+
+                const response =
+                    await fetch(
+                        "/generate",
+                        {
+
+                            method:
+                                "POST",
+
+                            headers:
+                                {
+                                    "Content-Type":
+                                        "application/json"
+                                },
+
+                            body:
+                                JSON.stringify(
+                                    {
+
+                                        document_type:
+                                            selectedDocumentType,
+
+                                        user_details:
+                                            details
+
+                                    }
+                                )
+
+                        }
+                    );
+
+
+
+                /* =================================================
+                   READ RESPONSE
+                ================================================== */
+
+                const data =
+                    await response.json();
+
+
+
+                /* =================================================
+                   SERVER ERROR
+                ================================================== */
+
+                if (
+                    !response.ok
+                ) {
+
+                    throw new Error(
+
+                        data.error ||
+                        "Document generation failed."
+
+                    );
+
+                }
+
+
+
+                /* =================================================
+                   CHECK GENERATED DOCUMENT
+                ================================================== */
+
+                if (
+                    !data.document ||
+                    !data.document.trim()
+                ) {
+
+                    throw new Error(
+                        "Groq returned an empty document."
+                    );
+
+                }
+
+
+
+                /* =================================================
+                   DISPLAY DOCUMENT
+                ================================================== */
+
+                generatedDocument.value =
+                    data.document;
+
+
+                resultSection.style.display =
+                    "block";
+
+
+
+                /* =================================================
+                   SCROLL TO DOCUMENT
+                ================================================== */
+
+                setTimeout(
+                    function () {
+
+                        resultSection.scrollIntoView({
+
+                            behavior:
+                                "smooth",
+
+                            block:
+                                "start"
+
+                        });
+
+                    },
+                    200
+                );
+
+
+            }
+
+
+            catch (error) {
+
+
+                console.error(
+                    "Generation Error:",
+                    error
+                );
+
+
+                alert(
+                    error.message ||
+                    "Unable to generate the document."
+                );
+
+            }
+
+
+            finally {
+
+
+                loading.style.display =
+                    "none";
+
+
+                generateBtn.disabled =
+                    false;
+
+
+                generateBtn.textContent =
+                    "Generate Legal Document";
+
+            }
+
+        }
+
+
+
+        /* =====================================================
+           COPY DOCUMENT
+        ===================================================== */
+
+        async function copyDocument() {
+
+
+            if (
+                !generatedDocument.value.trim()
+            ) {
+
+                goToGenerator();
+
+                return;
+
+            }
+
+
+            try {
+
+
+                await navigator.clipboard.writeText(
+
+                    generatedDocument.value
+
+                );
+
+
+                copyBtn.textContent =
+                    "Copied!";
+
+
+                setTimeout(
+                    function () {
+
+                        copyBtn.textContent =
+                            "Copy";
+
+                    },
+                    1500
+                );
+
+
+            }
+
+
+            catch (error) {
+
+
+                /*
+                 * Browser fallback.
+                 */
+
+                generatedDocument.select();
+
+
+                document.execCommand(
+                    "copy"
+                );
+
+
+                copyBtn.textContent =
+                    "Copied!";
+
+
+                setTimeout(
+                    function () {
+
+                        copyBtn.textContent =
+                            "Copy";
+
+                    },
+                    1500
+                );
+
+            }
+
+        }
+
+
+
+        /* =====================================================
+           DOWNLOAD PDF
+        ===================================================== */
+
+        async function downloadPDF() {
+
+
+            /*
+             * No document yet.
+             *
+             * Go to generator.
+             *
+             * DO NOT show an error.
+             */
+
+            if (
+                !generatedDocument.value.trim()
+            ) {
+
+                goToGenerator();
+
+                return;
+
+            }
+
+
+            try {
+
+
+                downloadPdfBtn.disabled =
+                    true;
+
+
+                downloadPdfBtn.textContent =
+                    "Creating PDF...";
+
+
+
+                /* =================================================
+                   SEND DOCUMENT TO FLASK
+                ================================================== */
+
+                const response =
+                    await fetch(
+                        "/download-pdf",
+                        {
+
+                            method:
+                                "POST",
+
+                            headers:
+                                {
+                                    "Content-Type":
+                                        "application/json"
+                                },
+
+                            body:
+                                JSON.stringify(
+                                    {
+
+                                        document:
+                                            generatedDocument.value,
+
+                                        document_type:
+                                            documentType.value
+
+                                    }
+                                )
+
+                        }
+                    );
+
+
+
+                /* =================================================
+                   HANDLE ERROR
+                ================================================== */
+
+                if (
+                    !response.ok
+                ) {
+
+
+                    let errorMessage =
+                        "PDF generation failed.";
+
+
+                    try {
+
+                        const data =
+                            await response.json();
+
+
+                        if (
+                            data.error
+                        ) {
+
+                            errorMessage =
+                                data.error;
+
+                        }
+
+                    }
+
+                    catch (jsonError) {
+
+                        console.error(
+                            jsonError
+                        );
+
+                    }
+
+
+                    throw new Error(
+                        errorMessage
+                    );
+
+                }
+
+
+
+                /* =================================================
+                   GET PDF
+                ================================================== */
+
+                const blob =
+                    await response.blob();
+
+
+
+                /* =================================================
+                   CREATE DOWNLOAD
+                ================================================== */
+
+                const url =
+                    window.URL.createObjectURL(
+                        blob
+                    );
+
+
+                const link =
+                    document.createElement(
+                        "a"
+                    );
+
+
+                link.href =
+                    url;
+
+
+                link.download =
+                    "LegalEase_Legal_Document.pdf";
+
+
+                document.body.appendChild(
+                    link
+                );
+
+
+                link.click();
+
+
+                link.remove();
+
+
+                window.URL.revokeObjectURL(
+                    url
+                );
+
+
+            }
+
+
+            catch (error) {
+
+
+                console.error(
+                    "PDF Error:",
+                    error
+                );
+
+
+                alert(
+                    error.message ||
+                    "Unable to create the PDF."
+                );
+
+            }
+
+
+            finally {
+
+
+                downloadPdfBtn.disabled =
+                    false;
+
+
+                downloadPdfBtn.textContent =
+                    "Download PDF";
+
+            }
+
+        }
+
+
+
+        /* =====================================================
+           GENERATE AGAIN
+        ===================================================== */
+
+        function generateAgain() {
+
+
+            resultSection.style.display =
+                "none";
+
+
+            generatedDocument.value =
+                "";
+
+
+            goToGenerator();
+
+        }
+
+
+
+        /* =====================================================
+           MAIN GENERATE BUTTON
+        ===================================================== */
+
+        generateBtn.addEventListener(
+
+            "click",
+
+            generateDocument
+
+        );
+
+
+
+        /* =====================================================
+           COPY BUTTON
+        ===================================================== */
+
+        copyBtn.addEventListener(
+
+            "click",
+
+            copyDocument
+
+        );
+
+
+
+        /* =====================================================
+           PDF BUTTON
+        ===================================================== */
+
+        downloadPdfBtn.addEventListener(
+
+            "click",
+
+            downloadPDF
+
+        );
+
+
+
+        /* =====================================================
+           GENERATE AGAIN BUTTON
+        ===================================================== */
+
+        generateAgainBtn.addEventListener(
+
+            "click",
+
+            generateAgain
+
+        );
+
+
+
+        /* =====================================================
+           AI CARD
+        ===================================================== */
+
+        document
+            .getElementById(
+                "aiCard"
+            )
+            .addEventListener(
+                "click",
+                function () {
+
+                    goToGenerator();
+
+                }
+            );
+
+
+        document
+            .getElementById(
+                "aiCardButton"
+            )
+            .addEventListener(
+                "click",
+                function (event) {
+
+                    event.stopPropagation();
+
+                    goToGenerator();
+
+                }
+            );
+
+
+
+        /* =====================================================
+           EDIT CARD
+        ===================================================== */
+
+        document
+            .getElementById(
+                "editCard"
+            )
+            .addEventListener(
+                "click",
+                function () {
+
+                    goToEditor();
+
+                }
+            );
+
+
+        document
+            .getElementById(
+                "editCardButton"
+            )
+            .addEventListener(
+                "click",
+                function (event) {
+
+                    event.stopPropagation();
+
+                    goToEditor();
+
+                }
+            );
+
+
+
+        /* =====================================================
+           PDF CARD
+        ===================================================== */
+
+        document
+            .getElementById(
+                "pdfCard"
+            )
+            .addEventListener(
+                "click",
+                function () {
+
+                    downloadPDF();
+
+                }
+            );
+
+
+        document
+            .getElementById(
+                "pdfCardButton"
+            )
+            .addEventListener(
+                "click",
+                function (event) {
+
+                    event.stopPropagation();
+
+                    downloadPDF();
+
+                }
+            );
+
+
+
+        /* =====================================================
+           CTRL + ENTER
+        ===================================================== */
+
+        userInput.addEventListener(
+
+            "keydown",
+
+            function (event) {
+
+                if (
+                    event.ctrlKey &&
+                    event.key === "Enter"
+                ) {
+
+                    event.preventDefault();
+
+                    generateDocument();
+
+                }
+
+            }
+
+        );
+
+    </script>
+
+</body>
+
+</html>

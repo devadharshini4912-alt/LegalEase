@@ -1,0 +1,497 @@
+python --version
+
+pip --version
+
+node --version
+
+npm --version
+----------------------------------------------
+#In PowerShell:
+
+cd $HOME\Desktop
+
+#Create the folder:
+
+mkdir LegalEase
+
+#Enter it:
+
+cd LegalEase
+
+#Check:
+
+pwd
+
+#You should see something similar to:
+
+#C:\Users\user\Desktop\LegalEase
+
+-------------------------------------------------------
+
+#Create Python virtual environment
+
+#Run:
+
+python -m venv venv
+
+#Activate it:
+
+.\venv\Scripts\Activate.ps1
+
+(venv) PS C:\Users\user\Desktop\LegalEase>
+If PowerShell gives an execution-policy error
+
+#Run:
+
+Set-ExecutionPolicy -Scope CurrentUser RemoteSigned
+
+#Press:
+
+Y
+
+#Then activate again:
+
+.\venv\Scripts\Activate.ps1
+
+---------------------------------------------------------------------
+
+#Install the required packages
+
+Flask → web server
+Google GenAI SDK → Gemini
+python-dotenv → environment variables
+ReportLab → PDF generation
+
+#Run:
+
+pip install Flask google-genai python-dotenv reportlab
+
+
+#Then verify:
+
+pip list
+
+#You should see packages including:
+
+Flask
+google-genai
+python-dotenv
+reportlab
+
+-------------------------------------------------------------
+
+ create folder and files using commands :- 
+
+# CMD folder in desktop:-
+
+cd $HOME\Desktop
+mkdir LegalEase
+cd LegalEase
+
+#Run:
+
+# powershell in cmd
+
+mkdir templates
+mkdir static
+mkdir static\css
+mkdir static\js
+
+#Create the files:
+# powershell in cmd
+
+New-Item app.py -ItemType File
+New-Item requirements.txt -ItemType File
+New-Item .env -ItemType File
+New-Item .gitignore -ItemType File
+New-Item templates\index.html -ItemType File
+New-Item templates\result.html -ItemType File
+New-Item static\css\style.css -ItemType File
+New-Item static\js\script.js -ItemType File
+New-Item test_gemini.py -ItemType File
+New-Item .env -ItemType File
+
+-----------------------------------------------------------------
+Change your .env to:
+
+GEMINI_API_KEY=YOUR_NEW_API_KEY_HERE
+
+Save and close Notepad.
+-----------------------------------------------------------------
+#command output:-
+
+python -c "from dotenv import load_dotenv; import os; load_dotenv(override=True); key=os.getenv('GEMINI_API_KEY'); print('API key found:', bool(key)); print('Key starts with:', key[:6] if key else 'NONE'); print('Key length:', len(key) if key else 0)"
+
+python test_gemini.py
+
+python app.py
+------------------------------------------------
+
+output input:-
+
+Landlord Name: Rajesh Kumar
+Tenant Name: Priya Sharma
+
+Property Address:
+123, Main Road,
+Coimbatore, Tamil Nadu – 641001
+
+Monthly Rent: ₹20,000
+Security Deposit: ₹40,000
+
+Agreement Duration: 11 months
+Start Date: 1 October 2026
+
+Payment Due Date: 5th of every month
+
+Electricity and Water:
+Tenant will pay electricity and water charges.
+
+Maintenance:
+Tenant will maintain the property properly.
+
+Additional Terms:
+No structural changes can be made to the property
+without the landlord's permission.
+-----------------------------------------------------------------
+
+Install Groq
+
+In your current LegalEase PowerShell:
+
+pip install groq
+
+Then verify:
+
+pip show groq
+output :-
+python test_groq.py
+
+API key:- 
+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
+-----------------------------------------------------------------------
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>LegalEase | AI Legal Document Generator</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}"
+    >
+
+</head>
+
+<body>
+
+    <header class="navbar">
+
+        <div class="brand">
+            <div class="brand-icon">⚖</div>
+
+            <div>
+                <h1>LegalEase</h1>
+                <span>AI-Powered Legal Document Generator</span>
+            </div>
+        </div>
+
+    </header>
+
+
+    <main class="main-container">
+
+        <section class="hero">
+
+            <div class="hero-content">
+
+                <span class="badge">
+                    Powered by Google Gemini
+                </span>
+
+                <h2>
+                    Create Legal Document
+                    <span>Drafts with AI</span>
+                </h2>
+
+                <p>
+                    Generate structured legal document drafts
+                    from simple information using Generative AI.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <section class="generator-card">
+
+            <div class="section-heading">
+
+                <h3>Create Your Document</h3>
+
+                <p>
+                    Select a document type and provide the
+                    required information.
+                </p>
+
+            </div>
+
+
+            <form id="documentForm">
+
+                <div class="form-group">
+
+                    <label for="documentType">
+                        Document Type
+                    </label>
+
+                    <select
+                        id="documentType"
+                        required
+                    >
+
+                        <option value="">
+                            Select document type
+                        </option>
+
+                        {% for key, value in document_types.items() %}
+
+                        <option value="{{ key }}">
+                            {{ value }}
+                        </option>
+
+                        {% endfor %}
+
+                    </select>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="userDetails">
+                        Document Details
+                    </label>
+
+                    <textarea
+                        id="userDetails"
+                        rows="14"
+                        placeholder="Enter the information required for your document.
+
+Example:
+
+Name:
+John Doe
+
+Other Party:
+Jane Doe
+
+Address:
+Coimbatore, Tamil Nadu
+
+Agreement Amount:
+₹20,000
+
+Duration:
+11 months
+
+Additional Terms:
+..."
+                        required
+                    ></textarea>
+
+                    <div class="input-help">
+                        Provide only information you want
+                        included in the draft.
+                    </div>
+
+                </div>
+
+
+                <div class="disclaimer">
+
+                    <strong>Important:</strong>
+
+                    LegalEase creates AI-generated
+                    document drafts. The output is not
+                    legal advice and should be reviewed
+                    by a qualified legal professional
+                    before official use.
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    id="generateButton"
+                    class="generate-button"
+                >
+
+                    <span id="buttonText">
+                        Generate Document
+                    </span>
+
+                    <span
+                        id="loadingSpinner"
+                        class="spinner hidden"
+                    ></span>
+
+                </button>
+
+            </form>
+
+
+            <div
+                id="errorMessage"
+                class="error-message hidden"
+            ></div>
+
+        </section>
+
+
+        <section
+            id="resultSection"
+            class="result-card hidden"
+        >
+
+            <div class="result-header">
+
+                <div>
+
+                    <span class="result-label">
+                        Generated Draft
+                    </span>
+
+                    <h3 id="resultTitle">
+                        Legal Document
+                    </h3>
+
+                </div>
+
+            </div>
+
+
+            <textarea
+                id="generatedDocument"
+                class="document-editor"
+            ></textarea>
+
+
+            <div class="action-buttons">
+
+                <button
+                    id="copyButton"
+                    class="secondary-button"
+                >
+                    Copy
+                </button>
+
+                <button
+                    id="downloadButton"
+                    class="secondary-button"
+                >
+                    Download PDF
+                </button>
+
+                <button
+                    id="regenerateButton"
+                    class="primary-button"
+                >
+                    Generate Again
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <section class="features">
+
+            <div class="feature">
+
+                <div class="feature-icon">
+                    🤖
+                </div>
+
+                <h4>Generative AI</h4>
+
+                <p>
+                    Uses Google Gemini to generate
+                    structured document drafts.
+                </p>
+
+            </div>
+
+
+            <div class="feature">
+
+                <div class="feature-icon">
+                    📝
+                </div>
+
+                <h4>Editable</h4>
+
+                <p>
+                    Review and modify the generated
+                    document before downloading.
+                </p>
+
+            </div>
+
+
+            <div class="feature">
+
+                <div class="feature-icon">
+                    📄
+                </div>
+
+                <h4>PDF Export</h4>
+
+                <p>
+                    Download your generated draft
+                    as a PDF document.
+                </p>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <footer>
+
+        <p>
+            © 2026 LegalEase · AI-assisted document drafting
+        </p>
+
+        <p>
+            LegalEase does not replace professional legal advice.
+        </p>
+
+    </footer>
+
+
+    <script
+        src="{{ url_for('static', filename='js/script.js') }}"
+    ></script>
+
+</body>
+
+</html>
